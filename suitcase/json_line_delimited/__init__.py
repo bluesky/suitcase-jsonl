@@ -21,7 +21,7 @@ def export(gen, directory, file_prefix, **kwargs):
     finally:
         serializer.close()
 
-     return serializer.artifacts
+    return serializer.artifacts
 
 
 class Serializer(event_model.DocumentRouter):

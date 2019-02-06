@@ -65,4 +65,5 @@ class Serializer(event_model.DocumentRouter):
         self.close()
 
     def close(self):
-        self._output_file.close()
+        if self._output_file is not None:
+            self._output_file.close()

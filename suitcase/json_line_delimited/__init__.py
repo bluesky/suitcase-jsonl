@@ -39,7 +39,11 @@ class Serializer(event_model.DocumentRouter):
         else:
             self._manager = directory
 
-        self.artifacts = self._manager.artifacts
+    @property
+    def artifacts(self):
+        # The manager's artifacts attribute is itself a property, and we must
+        # access it anew each time to be sure to get the latest content.
+        return self._manager.artifacts
 
     def _check_start(self, doc):
         if self._start_found:

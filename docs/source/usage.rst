@@ -2,8 +2,8 @@
 Usage
 =====
 
-Start by importing ``suitcase.json-line-delimited``.
+Start by importing ``suitcase.jsonl``.
 
 .. code-block:: python
 
-    import suitcase.json_line_delimited
+    import suitcase.jsonl

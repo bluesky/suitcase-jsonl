@@ -43,7 +43,7 @@ def get_config():
     cfg.style = "pep440-post"
     cfg.tag_prefix = "v"
     cfg.parentdir_prefix = "None"
-    cfg.versionfile_source = "suitcase/json_line_delimited/_version.py"
+    cfg.versionfile_source = "suitcase/jsonl/_version.py"
     cfg.verbose = False
     return cfg
 

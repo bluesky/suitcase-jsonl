@@ -1,0 +1,4 @@
+[run]
+branch = true
+include = suitcase/jsonl/*
+omit = suitcase/jsonl/_version.py

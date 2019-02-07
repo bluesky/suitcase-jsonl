@@ -58,11 +58,8 @@ class Serializer(event_model.DocumentRouter):
             self._check_start(doc)
             self._get_file()
 
-        self._output_file.write("%s\n" % json.dumps(doc))
+        self._output_file.write("%s\n" % json.dumps(doc, **self._kwargs))
         return name, doc
-
-    def __del__(self):
-        self.close()
 
     def close(self):
         if self._output_file is not None:

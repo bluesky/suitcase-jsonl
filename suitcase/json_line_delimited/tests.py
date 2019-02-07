@@ -1,9 +1,13 @@
-# Tests should generate (and then clean up) any files they need for testing. No
-# binary files should be included in the repository.
+import json
+from suitcase.json_line_delimited import export, NumpyEncoder
 
-from . import Serializer
-serializer = suitcase.json_line_delimited.Serializer()
-RE.subscribe(serializer)
-from bluesky.plans import scan
-from ophyd.sim import det, motor
-RE(scan([det], motor, 1, 3, 3))
+
+def test_export(tmp_path, example_data):
+    documents = example_data()
+    artifacts = export(documents, tmp_path)
+    filepath, = artifacts['stream_data']
+    with open(filepath) as file:
+        actual = [json.loads(line) for line in file]
+    expected = [json.loads(json.dumps(doc, cls=NumpyEncoder))
+                for doc in documents]
+    assert actual == expected

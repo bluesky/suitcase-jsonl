@@ -1,5 +1,5 @@
 import json
-from suitcase.json_line_delimited import export, NumpyEncoder
+from suitcase.jsonl import export, NumpyEncoder
 
 
 def test_export(tmp_path, example_data):

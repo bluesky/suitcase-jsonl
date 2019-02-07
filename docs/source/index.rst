@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-suitcase.json-line-delimited Documentation
+suitcase.jsonl Documentation
 ==========================================
 
 .. toctree::

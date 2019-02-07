@@ -48,7 +48,7 @@ class Serializer(event_model.DocumentRouter):
     def _check_start(self, doc):
         if self._start_found:
             raise RuntimeError(
-                "The serializer in suitcase-json-line-delimited expects "
+                "The serializer in suitcase-jsonl expects "
                 "documents from one run only. Two `start` documents where "
                 "sent to it")
         else:

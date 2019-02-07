@@ -1,2 +1,2 @@
 [flake8]
-exclude = .git,__pycache__,build,dist,versioneer.py,json_line_delimited/_version.py,docs/source/conf.py
+exclude = .git,__pycache__,build,dist,versioneer.py,jsonl/_version.py,docs/source/conf.py

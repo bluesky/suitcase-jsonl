@@ -2,6 +2,7 @@ import event_model
 from pathlib import Path
 import suitcase.utils
 from ._version import get_versions
+import numpy
 import json
 
 __version__ = get_versions()['version']
@@ -29,6 +30,7 @@ class Serializer(event_model.DocumentRouter):
         self._output_file = None
         self._file_prefix = file_prefix
         self._templated_file_prefix = ''
+        kwargs.setdefault('cls', NumpyEncoder)
         self._kwargs = kwargs
         self._start_found = False
 
@@ -58,9 +60,20 @@ class Serializer(event_model.DocumentRouter):
             self._check_start(doc)
             self._get_file()
 
-        self._output_file.write("%s\n" % json.dumps(doc, **self._kwargs))
+        line = "%s\n" % json.dumps((name, doc), **self._kwargs)
+        self._output_file.write(line)
         return name, doc
 
     def close(self):
         if self._output_file is not None:
             self._output_file.close()
+
+
+class NumpyEncoder(json.JSONEncoder):
+    # Credit: https://stackoverflow.com/a/47626762/1221924
+    def default(self, obj):
+        if isinstance(obj, (numpy.generic, numpy.ndarray)):
+            if numpy.isscalar(obj):
+                return obj.item()
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)

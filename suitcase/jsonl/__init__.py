@@ -9,13 +9,19 @@ __version__ = get_versions()['version']
 del get_versions
 
 
-# Suitcase subpackages must follow strict naming and interface conventions. The
-# public API must include Serializer and should include export if it is
-# intended to be user-facing.
+class NumpyEncoder(json.JSONEncoder):
+    # Credit: https://stackoverflow.com/a/47626762/1221924
+    def default(self, obj):
+        if isinstance(obj, (numpy.generic, numpy.ndarray)):
+            if numpy.isscalar(obj):
+                return obj.item()
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 
-def export(gen, directory, file_prefix='{uid}', **kwargs):
-    serializer = Serializer(directory, file_prefix, **kwargs)
+def export(gen, directory, file_prefix='{uid}',
+           cls=NumpyEncoder, **kwargs):
+    serializer = Serializer(directory, file_prefix, cls=cls, **kwargs)
     try:
         for item in gen:
             serializer(*item)
@@ -25,13 +31,13 @@ def export(gen, directory, file_prefix='{uid}', **kwargs):
 
 
 class Serializer(event_model.DocumentRouter):
-    def __init__(self, directory, file_prefix='{uid}', **kwargs):
+    def __init__(self, directory, file_prefix='{uid}',
+                 cls=NumpyEncoder, **kwargs):
 
         self._output_file = None
         self._file_prefix = file_prefix
         self._templated_file_prefix = ''
-        kwargs.setdefault('cls', NumpyEncoder)
-        self._kwargs = kwargs
+        self._kwargs = dict(cls=cls, **kwargs)
         self._start_found = False
 
         if isinstance(directory, (str, Path)):
@@ -71,13 +77,3 @@ class Serializer(event_model.DocumentRouter):
     def close(self):
         if self._output_file is not None:
             self._output_file.close()
-
-
-class NumpyEncoder(json.JSONEncoder):
-    # Credit: https://stackoverflow.com/a/47626762/1221924
-    def default(self, obj):
-        if isinstance(obj, (numpy.generic, numpy.ndarray)):
-            if numpy.isscalar(obj):
-                return obj.item()
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)

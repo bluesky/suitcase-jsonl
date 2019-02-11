@@ -2,7 +2,6 @@ import event_model
 from pathlib import Path
 import suitcase.utils
 from ._version import get_versions
-import numpy
 import json
 
 __version__ = get_versions()['version']

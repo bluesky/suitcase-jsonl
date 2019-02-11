@@ -2,25 +2,14 @@ import event_model
 from pathlib import Path
 import suitcase.utils
 from ._version import get_versions
-import numpy
 import json
 
 __version__ = get_versions()['version']
 del get_versions
 
 
-class NumpyEncoder(json.JSONEncoder):
-    # Credit: https://stackoverflow.com/a/47626762/1221924
-    def default(self, obj):
-        if isinstance(obj, (numpy.generic, numpy.ndarray)):
-            if numpy.isscalar(obj):
-                return obj.item()
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
-
-
 def export(gen, directory, file_prefix='{uid}',
-           cls=NumpyEncoder, **kwargs):
+           cls=event_model.NumpyEncoder, **kwargs):
     serializer = Serializer(directory, file_prefix, cls=cls, **kwargs)
     try:
         for item in gen:
@@ -32,7 +21,7 @@ def export(gen, directory, file_prefix='{uid}',
 
 class Serializer(event_model.DocumentRouter):
     def __init__(self, directory, file_prefix='{uid}',
-                 cls=NumpyEncoder, **kwargs):
+                 cls=event_model.NumpyEncoder, **kwargs):
 
         self._output_file = None
         self._file_prefix = file_prefix

@@ -1,5 +1,6 @@
 import json
-from suitcase.jsonl import export, NumpyEncoder
+from event_model import NumpyEncoder
+from suitcase.jsonl import export
 
 
 def test_export(tmp_path, example_data):

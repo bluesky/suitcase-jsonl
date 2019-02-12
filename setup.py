@@ -37,7 +37,7 @@ setup(
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     long_description=readme,
-    packages=['suitcase.jsonl'],
+    packages=['suitcase.jsonl', 'suitcase.jsonl.tests'],
     entry_points={
         'console_scripts': [
             # 'some.module:some_function',

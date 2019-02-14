@@ -6,7 +6,7 @@ from suitcase.jsonl import export
 def test_export(tmp_path, example_data):
     documents = example_data()
     artifacts = export(documents, tmp_path)
-    filepath, = artifacts['stream_data']
+    filepath, = artifacts['all']
     with open(filepath) as file:
         actual = [json.loads(line) for line in file]
     expected = [json.loads(json.dumps(doc, cls=NumpyEncoder))

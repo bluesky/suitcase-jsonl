@@ -52,7 +52,7 @@ class Serializer(event_model.DocumentRouter):
 
     def _get_file(self):
         filename = (f'{self._templated_file_prefix}.jsonl')
-        self._output_file = self._manager.open('stream_data', filename, 'xt')
+        self._output_file = self._manager.open('all', filename, 'xt')
 
     def __call__(self, name, doc):
         if name == 'start':

@@ -10,12 +10,10 @@ del get_versions
 
 def export(gen, directory, file_prefix='{uid}',
            cls=event_model.NumpyEncoder, **kwargs):
-    serializer = Serializer(directory, file_prefix, cls=cls, **kwargs)
-    try:
+    with Serializer(directory, file_prefix, cls=cls, **kwargs) as serializer:
         for item in gen:
             serializer(*item)
-    finally:
-        serializer.close()
+
     return serializer.artifacts
 
 
@@ -65,3 +63,9 @@ class Serializer(event_model.DocumentRouter):
 
     def close(self):
         self._manager.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exception_details):
+        self.close()

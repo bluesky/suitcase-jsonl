@@ -113,11 +113,6 @@ class Serializer(event_model.DocumentRouter):
         into valid json objects. The default is ``event_model.NumpyEncoder``
         which also converts all numpy objects into built-in python objects.
 
-    Returns
-    -------
-    dest : dict
-        dict mapping the 'labels' to lists of file names
-
     Examples
     --------
     Generate files with unique-identifier names in the current directory.

@@ -10,6 +10,64 @@ del get_versions
 
 def export(gen, directory, file_prefix='{uid}',
            cls=event_model.NumpyEncoder, **kwargs):
+
+    """
+    Export a stream of documents to a json line delimited file.
+
+    All documents are recorded as seperate lines with the form (name, doc) This
+    creates a file named: ``<directory>/<file_prefix>.jsonl``
+    .. note::
+        This can alternatively be used to write data to generic buffers rather
+        than creating files on disk. See the documentation for the
+        ``directory`` parameter below.
+    Parameters
+    ----------
+    gen : generator
+        expected to yield ``(name, document)`` pairs
+    directory : string, Path or Manager.
+        For basic uses, this should be the path to the output directory given
+        as a string or Path object. Use an empty string ``''`` to place files
+        in the current working directory.
+        In advanced applications, this may direct the serialized output to a
+        memory buffer, network socket, or other writable buffer. It should be
+        an instance of ``suitcase.utils.MemoryBufferManager`` and
+        ``suitcase.utils.MultiFileManager`` or any object implementing that
+        interface. See the suitcase documentation
+        (http://nsls-ii.github.io/suitcase) for details.
+    file_prefix : str, optional
+        The first part of the filename of the generated output files. This
+        string may include templates as in
+        ``{start[proposal_id]}-{start[sample_name]}-``, which are populated
+        from the RunStart (start), EventDescriptor (descriptor) or Event
+        (event) documents. The default value is ``{start[uid]}-`` which is
+        guaranteed to be present and unique. A more descriptive value depends
+        on the application and is therefore left to the user.
+    cls : Encoder class, optional
+        A ``json.JSONEncoder`` class that is used for parsing the documents
+        into valid json objects. The default is ``event_model.NumpyEncoder``
+        which also converts all numpy objects into built-in python objects.
+
+    Returns
+    -------
+    dest : dict
+        dict mapping the 'labels' to lists of file names
+
+    Examples
+    --------
+    Generate files with unique-identifier names in the current directory.
+
+    >>> export(gen, '')
+
+    Generate files with more readable metadata in the file names.
+    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
+
+    Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
+    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
+
+    Place the files in a different directory, such as on a mounted USB stick.
+    >>> export(gen, '/path/to/my_usb_stick')
+    """
+
     with Serializer(directory, file_prefix, cls=cls, **kwargs) as serializer:
         for item in gen:
             serializer(*item)
@@ -18,6 +76,64 @@ def export(gen, directory, file_prefix='{uid}',
 
 
 class Serializer(event_model.DocumentRouter):
+
+    """
+    Serialize a stream of documents to a json line delimited file.
+
+    All documents are recorded as seperate lines with the form (name, doc) This
+    creates a file named: ``<directory>/<file_prefix>.jsonl``
+    .. note::
+        This can alternatively be used to write data to generic buffers rather
+        than creating files on disk. See the documentation for the
+        ``directory`` parameter below.
+    Parameters
+    ----------
+    gen : generator
+        expected to yield ``(name, document)`` pairs
+    directory : string, Path or Manager.
+        For basic uses, this should be the path to the output directory given
+        as a string or Path object. Use an empty string ``''`` to place files
+        in the current working directory.
+        In advanced applications, this may direct the serialized output to a
+        memory buffer, network socket, or other writable buffer. It should be
+        an instance of ``suitcase.utils.MemoryBufferManager`` and
+        ``suitcase.utils.MultiFileManager`` or any object implementing that
+        interface. See the suitcase documentation
+        (http://nsls-ii.github.io/suitcase) for details.
+    file_prefix : str, optional
+        The first part of the filename of the generated output files. This
+        string may include templates as in
+        ``{start[proposal_id]}-{start[sample_name]}-``, which are populated
+        from the RunStart (start), EventDescriptor (descriptor) or Event
+        (event) documents. The default value is ``{start[uid]}-`` which is
+        guaranteed to be present and unique. A more descriptive value depends
+        on the application and is therefore left to the user.
+    cls : Encoder class, optional
+        A ``json.JSONEncoder`` class that is used for parsing the documents
+        into valid json objects. The default is ``event_model.NumpyEncoder``
+        which also converts all numpy objects into built-in python objects.
+
+    Returns
+    -------
+    dest : dict
+        dict mapping the 'labels' to lists of file names
+
+    Examples
+    --------
+    Generate files with unique-identifier names in the current directory.
+
+    >>> export(gen, '')
+
+    Generate files with more readable metadata in the file names.
+    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
+
+    Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
+    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
+
+    Place the files in a different directory, such as on a mounted USB stick.
+    >>> export(gen, '/path/to/my_usb_stick')
+    """
+
     def __init__(self, directory, file_prefix='{uid}',
                  cls=event_model.NumpyEncoder, **kwargs):
 

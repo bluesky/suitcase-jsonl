@@ -39,12 +39,11 @@ def export(gen, directory, file_prefix='{uid}',
         (http://nsls-ii.github.io/suitcase) for details.
     file_prefix : str, optional
         The first part of the filename of the generated output files. This
-        string may include templates as in
-        ``{start[proposal_id]}-{start[sample_name]}-``, which are populated
-        from the RunStart (start), EventDescriptor (descriptor) or Event
-        (event) documents. The default value is ``{start[uid]}-`` which is
-        guaranteed to be present and unique. A more descriptive value depends
-        on the application and is therefore left to the user.
+        string may include templates as in ``{proposal_id}-{sample_name}-``,
+        which are populated from the RunStart document. The default value is
+        ``{uid}`` which is guaranteed to be present and unique. A more
+        descriptive value depends on the application and is therefore left to
+        the user.
     cls : Encoder class, optional
         A ``json.JSONEncoder`` class that is used for parsing the documents
         into valid json objects. The default is ``event_model.NumpyEncoder``
@@ -62,12 +61,15 @@ def export(gen, directory, file_prefix='{uid}',
     >>> export(gen, '')
 
     Generate files with more readable metadata in the file names.
-    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
+
+    >>> export(gen, '', '{plan_name}-{motors}-')
 
     Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
-    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
+
+    >>> export(gen, '', '{time:%Y-%m-%d_%H:%M}-')
 
     Place the files in a different directory, such as on a mounted USB stick.
+
     >>> export(gen, '/path/to/my_usb_stick')
     """
 
@@ -105,12 +107,11 @@ class Serializer(event_model.DocumentRouter):
         (http://nsls-ii.github.io/suitcase) for details.
     file_prefix : str, optional
         The first part of the filename of the generated output files. This
-        string may include templates as in
-        ``{start[proposal_id]}-{start[sample_name]}-``, which are populated
-        from the RunStart (start), EventDescriptor (descriptor) or Event
-        (event) documents. The default value is ``{start[uid]}-`` which is
-        guaranteed to be present and unique. A more descriptive value depends
-        on the application and is therefore left to the user.
+        string may include templates as in ``{proposal_id}-{sample_name}-``,
+        which are populated from the RunStart document. The default value is
+        ``{uid}`` which is guaranteed to be present and unique. A more
+        descriptive value depends on the application and is therefore left to
+        the user.
     cls : Encoder class, optional
         A ``json.JSONEncoder`` class that is used for parsing the documents
         into valid json objects. The default is ``event_model.NumpyEncoder``
@@ -123,12 +124,15 @@ class Serializer(event_model.DocumentRouter):
     >>> export(gen, '')
 
     Generate files with more readable metadata in the file names.
-    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
+
+    >>> export(gen, '', '{plan_name}-{motors}-')
 
     Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
-    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
+
+    >>> export(gen, '', '{time:%Y-%m-%d_%H:%M}-')
 
     Place the files in a different directory, such as on a mounted USB stick.
+
     >>> export(gen, '/path/to/my_usb_stick')
     """
 

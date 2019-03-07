@@ -52,8 +52,8 @@ def export(gen, directory, file_prefix='{uid}',
 
     Returns
     -------
-    dest : dict
-        dict mapping the 'labels' to lists of file names
+    artifacts : dict
+        Maps 'labels' to lists of artifacts (e.g. filepaths)
 
     Examples
     --------

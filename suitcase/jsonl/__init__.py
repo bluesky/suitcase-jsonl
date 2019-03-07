@@ -12,14 +12,17 @@ def export(gen, directory, file_prefix='{uid}',
            cls=event_model.NumpyEncoder, **kwargs):
 
     """
-    Export a stream of documents to a json line delimited file.
+    Export a stream of documents to a newline-delimited JSON file.
 
-    All documents are recorded as seperate lines with the form (name, doc) This
-    creates a file named: ``<directory>/<file_prefix>.jsonl``
+    All documents are recorded as seperate lines with the form [name, doc].
+    This creates a file named: ``<directory>/<file_prefix>.jsonl``
+
     .. note::
+
         This can alternatively be used to write data to generic buffers rather
         than creating files on disk. See the documentation for the
         ``directory`` parameter below.
+
     Parameters
     ----------
     gen : generator

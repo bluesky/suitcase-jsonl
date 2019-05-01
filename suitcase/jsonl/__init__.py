@@ -116,6 +116,10 @@ class Serializer(event_model.DocumentRouter):
         A ``json.JSONEncoder`` class that is used for parsing the documents
         into valid json objects. The default is ``event_model.NumpyEncoder``
         which also converts all numpy objects into built-in python objects.
+    flush : boolean
+        Flush the file to disk after each document. As a consequence, writing
+        the full document stream is slower but each document is immediately
+        available for reading. False by default.
 
     Examples
     --------
@@ -137,12 +141,13 @@ class Serializer(event_model.DocumentRouter):
     """
 
     def __init__(self, directory, file_prefix='{uid}',
-                 cls=event_model.NumpyEncoder, **kwargs):
+                 cls=event_model.NumpyEncoder, flush=False, **kwargs):
 
         self._output_file = None
         self._file_prefix = file_prefix
         self._templated_file_prefix = ''
         self._kwargs = dict(cls=cls, **kwargs)
+        self._flush = flush
         self._start_found = False
 
         if isinstance(directory, (str, Path)):
@@ -177,6 +182,8 @@ class Serializer(event_model.DocumentRouter):
 
         line = "%s\n" % json.dumps((name, doc), **self._kwargs)
         self._output_file.write(line)
+        if self._flush:
+            self._output_file.flush()
         return name, doc
 
     def close(self):

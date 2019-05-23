@@ -8,7 +8,7 @@ __version__ = get_versions()['version']
 del get_versions
 
 
-def export(gen, directory, file_prefix='{uid}',
+def export(gen, directory, file_prefix='{start[uid]}',
            cls=event_model.NumpyEncoder, **kwargs):
 
     """
@@ -39,9 +39,10 @@ def export(gen, directory, file_prefix='{uid}',
         (http://nsls-ii.github.io/suitcase) for details.
     file_prefix : str, optional
         The first part of the filename of the generated output files. This
-        string may include templates as in ``{proposal_id}-{sample_name}-``,
+        string may include templates as in
+        ``{start[proposal_id]}-{start[sample_name]}-``,
         which are populated from the RunStart document. The default value is
-        ``{uid}`` which is guaranteed to be present and unique. A more
+        ``{start[uid]}`` which is guaranteed to be present and unique. A more
         descriptive value depends on the application and is therefore left to
         the user.
     cls : Encoder class, optional
@@ -62,11 +63,11 @@ def export(gen, directory, file_prefix='{uid}',
 
     Generate files with more readable metadata in the file names.
 
-    >>> export(gen, '', '{plan_name}-{motors}-')
+    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
 
     Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
 
-    >>> export(gen, '', '{time:%Y-%m-%d_%H:%M}-')
+    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
 
     Place the files in a different directory, such as on a mounted USB stick.
 
@@ -107,9 +108,10 @@ class Serializer(event_model.DocumentRouter):
         (http://nsls-ii.github.io/suitcase) for details.
     file_prefix : str, optional
         The first part of the filename of the generated output files. This
-        string may include templates as in ``{proposal_id}-{sample_name}-``,
+        string may include templates as in
+        ``{start[proposal_id]}-{start[sample_name]}-``,
         which are populated from the RunStart document. The default value is
-        ``{uid}`` which is guaranteed to be present and unique. A more
+        ``{start[uid]}`` which is guaranteed to be present and unique. A more
         descriptive value depends on the application and is therefore left to
         the user.
     cls : Encoder class, optional
@@ -129,18 +131,18 @@ class Serializer(event_model.DocumentRouter):
 
     Generate files with more readable metadata in the file names.
 
-    >>> export(gen, '', '{plan_name}-{motors}-')
+    >>> export(gen, '', '{start[plan_name]}-{start[motors]}-')
 
     Include the experiment's start time formatted as YYYY-MM-DD_HH-MM.
 
-    >>> export(gen, '', '{time:%Y-%m-%d_%H:%M}-')
+    >>> export(gen, '', '{start[time]:%Y-%m-%d_%H:%M}-')
 
     Place the files in a different directory, such as on a mounted USB stick.
 
     >>> export(gen, '/path/to/my_usb_stick')
     """
 
-    def __init__(self, directory, file_prefix='{uid}',
+    def __init__(self, directory, file_prefix='{start[uid]}',
                  cls=event_model.NumpyEncoder, flush=False, **kwargs):
 
         self._output_file = None
@@ -169,7 +171,7 @@ class Serializer(event_model.DocumentRouter):
                 "sent to it")
         else:
             self._start_found = True
-            self._templated_file_prefix = self._file_prefix.format(**doc)
+            self._templated_file_prefix = self._file_prefix.format(start=doc)
 
     def _get_file(self):
         filename = (f'{self._templated_file_prefix}.jsonl')
@@ -185,6 +187,9 @@ class Serializer(event_model.DocumentRouter):
         if self._flush:
             self._output_file.flush()
         return name, doc
+
+    def stop(self, doc):
+        self.close()
 
     def close(self):
         self._manager.close()

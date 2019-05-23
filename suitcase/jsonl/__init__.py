@@ -188,7 +188,7 @@ class Serializer(event_model.DocumentRouter):
             self._output_file.flush()
         return name, doc
 
-    def stop(self):
+    def stop(self, doc):
         self.close()
 
     def close(self):

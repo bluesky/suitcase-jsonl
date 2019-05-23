@@ -33,5 +33,5 @@ def test_file_prefix_formatting(file_prefix_list, example_data, tmp_path):
 
     if artifacts:
         unique_actual = set(str(artifact).split('/')[-1].partition('-')[0]
-                            for artifact in artifacts['stream_data'])
+                            for artifact in artifacts['all'])
         assert unique_actual == set([templated_file_prefix])

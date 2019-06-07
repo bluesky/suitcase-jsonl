@@ -186,10 +186,9 @@ class Serializer(event_model.DocumentRouter):
         self._output_file.write(line)
         if self._flush:
             self._output_file.flush()
+        if name == 'stop':
+            self.close()
         return name, doc
-
-    def stop(self, doc):
-        self.close()
 
     def close(self):
         self._manager.close()

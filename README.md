@@ -8,7 +8,7 @@ This is a suitcase subpackage for reading a particular file format.
 pip install suitcase-jsonl
 ```
 
-## Common use cases.
+## Common use cases
 The common use case for this file format in streaming mode is to attach a
 RunRouter to the RunEngine (RE) using the following lines:
 
@@ -29,8 +29,7 @@ RE.subscribe(rr)
 ```
 
 For a simple 'count' scan the file output will look like the following with
-each document type ('start', 'descriptor', 'event-page' or 'stop') found on a
-new line in the file:
+each document type found on a new line in the file:
 
 ```
 ["start", {"uid": "cd92fe6d-bcef-44cf-9624-205d7faa8164",

@@ -12,18 +12,18 @@ pip install suitcase-jsonl
 The common use case for this file format in streaming mode is to attach a
 RunRouter to the RunEngine (RE) using the following lines:
 
-```
+```python
 # create a factory that will use the serializer to create on-the-fly files.
 def factory(name, start_doc):
     # the following creates a serializer that will close the file when the stop
     # document is sent to it.
-    serializer=suitcase.jsonl.Serializer(directory='...',
+    serializer = suitcase.jsonl.Serializer(directory='...',
                                          file_prefix='...')
     serializer(name, start_doc)
     # ensure that any further documents from the RunRouter are processed.
     return [serializer], []
 
-# generate the RunRouter from the factory and subscribe it too the RunEngine
+# generate the RunRouter from the factory and subscribe it to the RunEngine
 rr = event_model.RunRouter([factory])
 RE.subscribe(rr)
 ```
@@ -31,7 +31,7 @@ RE.subscribe(rr)
 For a simple 'count' scan the file output will look like the following with
 each document type found on a new line in the file:
 
-```
+```python
 ["start", {"uid": "cd92fe6d-bcef-44cf-9624-205d7faa8164",
            "time": 1560865593.134833, "plan_name": "count", "num_points": 1,
            "plan_type": "generator",
@@ -70,10 +70,10 @@ each document type found on a new line in the file:
           "num_events": {"primary": 1}}]
 ```
 
-If for some reason only the start document is required then the following can
+If for some reason only the start document is required, then the following can
 be used to create the factory:
 
-```
+```python
 import event_model
 import suitcase.jsonl
 

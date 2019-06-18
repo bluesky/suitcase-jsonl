@@ -18,7 +18,7 @@ def factory(name, start_doc):
     # the following creates a serializer that will close the file when the stop
     # document is sent to it.
     serializer = suitcase.jsonl.Serializer(directory='...',
-                                         file_prefix='...')
+                                           file_prefix='...')
     serializer(name, start_doc)
     # ensure that any further documents from the RunRouter are processed.
     return [serializer], []

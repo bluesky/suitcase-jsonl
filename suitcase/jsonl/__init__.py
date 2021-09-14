@@ -157,6 +157,8 @@ class Serializer(event_model.DocumentRouter):
         else:
             self._manager = directory
 
+        self._closed = False
+
     @property
     def artifacts(self):
         # The manager's artifacts attribute is itself a property, and we must
@@ -191,7 +193,9 @@ class Serializer(event_model.DocumentRouter):
         return name, doc
 
     def close(self):
-        self._manager.close()
+        if not self._closed:
+            self._closed = True
+            self._manager.close()
 
     def __enter__(self):
         return self

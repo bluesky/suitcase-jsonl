@@ -1,6 +1,6 @@
 import json
 from event_model import NumpyEncoder
-from suitcase.jsonl import export
+from suitcase.jsonl import export, Serializer
 
 
 def test_export(tmp_path, example_data):
@@ -35,3 +35,12 @@ def test_file_prefix_formatting(file_prefix_list, example_data, tmp_path):
         unique_actual = set(str(artifact).split('/')[-1].partition('-')[0]
                             for artifact in artifacts['all'])
         assert unique_actual == set([templated_file_prefix])
+
+
+def test_double_close(example_data, tmp_path):
+    collector = example_data()
+    with Serializer(tmp_path) as sc:
+        for name, doc in collector:
+            sc(name, doc)
+        sc.close()
+        sc.close()

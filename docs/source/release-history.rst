@@ -2,7 +2,7 @@
 Release History
 ===============
 
-Release 0.2.2 (2021-10-08)
+Release 0.2.2 (2021-10-12)
 --------------------------
 
 - Made it safe to call ``serializer.close()`` repeatedly
